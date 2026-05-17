@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devraj Foods – Product Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-green: #1a3d2e;
+    --mid-green: #2e6b4f;
+    --light-green: #4a9e72;
+    --gold: #c8a84b;
+    --cream: #f5f0e8;
+    --cream-dark: #ede6d6;
+    --text-dark: #1a1a1a;
+    --text-mid: #444;
+    --star-on: #f5a623;
+    --star-off: #ccc;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--dark-green);
+    padding: 36px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    color: var(--cream);
+    letter-spacing: 1px;
+  }
+  .brand-sub {
+    font-size: 0.78rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .header-tagline {
+    margin-top: 14px;
+    color: rgba(245,240,232,0.7);
+    font-size: 0.9rem;
+    font-weight: 300;
+  }
+
+  /* ── CONTAINER ── */
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* ── INTRO CARD ── */
+  .intro-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 24px 0 20px;
+    border-top: 5px solid var(--dark-green);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .intro-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--dark-green);
+    margin-bottom: 8px;
+  }
+  .intro-card p {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .required-note {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: #c0392b;
+  }
+
+  /* ── SECTION LABEL (product title) ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 14px;
+  }
+  .section-divider .pill {
+    background: var(--dark-green);
+    color: var(--cream);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .section-divider .line {
+    flex: 1;
+    height: 1px;
+    background: var(--cream-dark);
+  }
+  .section-divider .emoji {
+    font-size: 1.3rem;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 22px 22px 26px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.1); }
+
+  .question-label {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .question-label .req { color: #c0392b; margin-left: 2px; }
+
+  /* ── STAR RATING ── */
+  .star-group {
+    display: flex;
+    gap: 6px;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+  .star-group input { display: none; }
+  .star-group label {
+    font-size: 2rem;
+    color: var(--star-off);
+    cursor: pointer;
+    transition: color 0.15s, transform 0.15s;
+    user-select: none;
+  }
+  .star-group label:hover,
+  .star-group label:hover ~ label,
+  .star-group input:checked ~ label {
+    color: var(--star-on);
+  }
+  .star-group label:hover { transform: scale(1.2); }
+  .star-desc {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    color: var(--text-mid);
+    font-style: italic;
+  }
+
+  /* ── RADIO OPTIONS ── */
+  .options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .opt-label {
+    cursor: pointer;
+  }
+  .opt-label input { display: none; }
+  .opt-chip {
+    display: inline-block;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--cream-dark);
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    background: var(--cream);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .opt-label input:checked + .opt-chip {
+    background: var(--dark-green);
+    color: var(--cream);
+    border-color: var(--dark-green);
+  }
+  .opt-label:hover .opt-chip {
+    border-color: var(--mid-green);
+    color: var(--dark-green);
+  }
+
+  /* ── CHECKBOX OPTIONS ── */
+  .check-label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--cream-dark);
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    background: var(--cream);
+    margin-bottom: 7px;
+    transition: all 0.15s;
+  }
+  .check-label input { display: none; }
+  .custom-check {
+    width: 18px; height: 18px;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .check-label input:checked + .custom-check {
+    background: var(--mid-green);
+    border-color: var(--mid-green);
+  }
+  .check-label input:checked + .custom-check::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    top: -1px; left: 2px;
+  }
+  .check-label input:checked ~ span { color: var(--dark-green); font-weight: 500; }
+  .check-label:hover { border-color: var(--mid-green); }
+
+  /* ── TEXTAREA / INPUT ── */
+  textarea, input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    background: var(--cream);
+    resize: vertical;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+  textarea:focus, input:focus {
+    border-color: var(--mid-green);
+    background: white;
+  }
+  textarea { min-height: 80px; }
+
+  /* ── SUBMIT BUTTON ── */
+  .submit-section {
+    margin-top: 32px;
+    text-align: center;
+  }
+  .submit-btn {
+    background: var(--dark-green);
+    color: var(--cream);
+    border: none;
+    border-radius: 999px;
+    padding: 16px 52px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 4px 16px rgba(26,61,46,0.3);
+  }
+  .submit-btn:hover { background: var(--mid-green); transform: translateY(-2px); }
+  .submit-btn:active { transform: translateY(0); }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 40px;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid var(--cream-dark);
+  }
+  .footer p { font-size: 0.8rem; color: #888; }
+  .footer a { color: var(--mid-green); text-decoration: none; }
+  .footer .contact-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    font-size: 0.82rem;
+    color: var(--text-mid);
+  }
+
+  /* ── THANK YOU SCREEN ── */
+  #thankyou {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+  }
+  #thankyou .big-check {
+    font-size: 4rem;
+    animation: pop 0.4s ease;
+  }
+  @keyframes pop {
+    0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); }
+  }
+  #thankyou h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--dark-green);
+    margin: 16px 0 8px;
+  }
+  #thankyou p { color: var(--text-mid); font-size: 0.95rem; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    background: var(--cream-dark);
+    border-radius: 999px;
+    height: 4px;
+    margin: 18px 0 0;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  @media (max-width: 480px) {
+    .brand-name { font-size: 1.9rem; }
+    .star-group label { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="brand-name">🌿 Devraj Foods</div>
+  <div class="brand-sub">Natural Powder Products</div>
+  <p class="header-tagline">We'd love to hear your honest feedback. It takes just 3 minutes!</p>
+</div>
+
+<div class="container">
+
+  <!-- PROGRESS -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+
+  <!-- FORM -->
+  <form id="reviewForm" name="devraj-review" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
+    <input type="hidden" name="form-name" value="devraj-review">
+    <input type="hidden" name="bot-field" style="display:none">
+
+    <!-- INTRO CARD -->
+    <div class="intro-card">
+      <h2>Product Experience Survey</h2>
+      <p>You recently received a product kit from Devraj Foods containing <strong>Ginger Powder, Beetroot Powder, Moringa Powder, Raw Banana Powder, and Ripe Banana Powder</strong>. Please share your honest experience for each product.</p>
+      <p class="required-note">* Required questions</p>
+    </div>
+
+    <!-- ── SECTION 0: CUSTOMER INFO ── -->
+    <div class="section-divider">
+      <div class="pill">About You</div>
+      <div class="line"></div>
+      <div class="emoji">👤</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Your Name (optional)</div>
+      <input type="text" name="customer_name" placeholder="e.g. Ramesh Patel">
+    </div>
+
+    <div class="card">
+      <div class="question-label">Phone / WhatsApp Number (optional)</div>
+      <input type="tel" name="phone" placeholder="e.g. 98765 43210">
+    </div>
+
+    <div class="card">
+      <div class="question-label">How did you come to know about Devraj Foods? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="source" value="friend" required><span class="opt-chip">Friend / Family</span></label>
+        <label class="opt-label"><input type="radio" name="source" value="social"><span class="opt-chip">Social Media</span></label>
+        <label class="opt-label"><input type="radio" name="source" value="doctor"><span class="opt-chip">Doctor / Expert</span></label>
+        <label class="opt-label"><input type="radio" name="source" value="event"><span class="opt-chip">Event / Exhibition</span></label>
+        <label class="opt-label"><input type="radio" name="source" value="other"><span class="opt-chip">Other</span></label>
+      </div>
+    </div>
+
+    <!-- ── SECTION 1: GINGER POWDER ── -->
+    <div class="section-divider">
+      <div class="pill">Product 1</div>
+      <div class="line"></div>
+      <div class="emoji">🫚</div>
+    </div>
+    <div class="card" style="border-left: 4px solid #e67e22;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e67e22;margin-bottom:16px;">Ginger Powder (Adrak Powder)</div>
+
+      <div class="question-label">Overall Rating <span class="req">*</span></div>
+      <div class="star-group" id="s1">
+        <input type="radio" name="ginger_rating" id="g5" value="5"><label for="g5">★</label>
+        <input type="radio" name="ginger_rating" id="g4" value="4"><label for="g4">★</label>
+        <input type="radio" name="ginger_rating" id="g3" value="3"><label for="g3">★</label>
+        <input type="radio" name="ginger_rating" id="g2" value="2"><label for="g2">★</label>
+        <input type="radio" name="ginger_rating" id="g1" value="1"><label for="g1">★</label>
+      </div>
+      <div class="star-desc">1 = Poor &nbsp;|&nbsp; 3 = Good &nbsp;|&nbsp; 5 = Excellent</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How would you describe the taste? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="ginger_taste" value="Strong & Spicy" required><span class="opt-chip">Strong & Spicy 🌶️</span></label>
+        <label class="opt-label"><input type="radio" name="ginger_taste" value="Mild & Warm"><span class="opt-chip">Mild & Warm</span></label>
+        <label class="opt-label"><input type="radio" name="ginger_taste" value="Authentic Natural"><span class="opt-chip">Authentic Natural</span></label>
+        <label class="opt-label"><input type="radio" name="ginger_taste" value="Too Strong"><span class="opt-chip">Too Strong</span></label>
+        <label class="opt-label"><input type="radio" name="ginger_taste" value="Not Enough Flavour"><span class="opt-chip">Not Enough Flavour</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How did you use the Ginger Powder? (Select all that apply)</div>
+      <label class="check-label"><input type="checkbox" name="ginger_use" value="Tea / Chai"><span class="custom-check"></span><span>Tea / Chai ☕</span></label>
+      <label class="check-label"><input type="checkbox" name="ginger_use" value="Cooking / Sabzi"><span class="custom-check"></span><span>Cooking / Sabzi 🍛</span></label>
+      <label class="check-label"><input type="checkbox" name="ginger_use" value="Warm Water Detox"><span class="custom-check"></span><span>Warm Water Detox 💧</span></label>
+      <label class="check-label"><input type="checkbox" name="ginger_use" value="Smoothie / Juice"><span class="custom-check"></span><span>Smoothie / Juice 🥤</span></label>
+      <label class="check-label"><input type="checkbox" name="ginger_use" value="Health Drink"><span class="custom-check"></span><span>Health Drink</span></label>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Did you feel any health benefit after using Ginger Powder?</div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="ginger_benefit" value="Yes, definitely"><span class="opt-chip">Yes, definitely ✅</span></label>
+        <label class="opt-label"><input type="radio" name="ginger_benefit" value="Somewhat"><span class="opt-chip">Somewhat</span></label>
+        <label class="opt-label"><input type="radio" name="ginger_benefit" value="Too early to say"><span class="opt-chip">Too early to say</span></label>
+        <label class="opt-label"><input type="radio" name="ginger_benefit" value="No"><span class="opt-chip">No</span></label>
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: BEETROOT POWDER ── -->
+    <div class="section-divider">
+      <div class="pill">Product 2</div>
+      <div class="line"></div>
+      <div class="emoji">🫀</div>
+    </div>
+    <div class="card" style="border-left: 4px solid #c0392b;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#c0392b;margin-bottom:16px;">Beetroot Powder (Chukandar Powder)</div>
+
+      <div class="question-label">Overall Rating <span class="req">*</span></div>
+      <div class="star-group">
+        <input type="radio" name="beet_rating" id="b5" value="5"><label for="b5">★</label>
+        <input type="radio" name="beet_rating" id="b4" value="4"><label for="b4">★</label>
+        <input type="radio" name="beet_rating" id="b3" value="3"><label for="b3">★</label>
+        <input type="radio" name="beet_rating" id="b2" value="2"><label for="b2">★</label>
+        <input type="radio" name="beet_rating" id="b1" value="1"><label for="b1">★</label>
+      </div>
+      <div class="star-desc">1 = Poor &nbsp;|&nbsp; 3 = Good &nbsp;|&nbsp; 5 = Excellent</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How was the taste & colour of the powder? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="beet_taste" value="Earthy & Natural" required><span class="opt-chip">Earthy & Natural 🌿</span></label>
+        <label class="opt-label"><input type="radio" name="beet_taste" value="Sweet & Pleasant"><span class="opt-chip">Sweet & Pleasant</span></label>
+        <label class="opt-label"><input type="radio" name="beet_taste" value="Vibrant Deep Red"><span class="opt-chip">Vibrant Deep Red ❤️</span></label>
+        <label class="opt-label"><input type="radio" name="beet_taste" value="Too Earthy / Soil-like"><span class="opt-chip">Too Earthy / Soil-like</span></label>
+        <label class="opt-label"><input type="radio" name="beet_taste" value="Bland"><span class="opt-chip">Bland</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How did you consume the Beetroot Powder? (Select all that apply)</div>
+      <label class="check-label"><input type="checkbox" name="beet_use" value="Smoothie / Shake"><span class="custom-check"></span><span>Smoothie / Shake 🥤</span></label>
+      <label class="check-label"><input type="checkbox" name="beet_use" value="Juice with water"><span class="custom-check"></span><span>Juice with water</span></label>
+      <label class="check-label"><input type="checkbox" name="beet_use" value="Pre-workout drink"><span class="custom-check"></span><span>Pre-workout drink 💪</span></label>
+      <label class="check-label"><input type="checkbox" name="beet_use" value="Added to food / roti"><span class="custom-check"></span><span>Added to food / roti</span></label>
+      <label class="check-label"><input type="checkbox" name="beet_use" value="Face mask / skin use"><span class="custom-check"></span><span>Face mask / skin use 💆</span></label>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Did you notice any of these benefits? (Select all that apply)</div>
+      <label class="check-label"><input type="checkbox" name="beet_benefit" value="More energy"><span class="custom-check"></span><span>More energy ⚡</span></label>
+      <label class="check-label"><input type="checkbox" name="beet_benefit" value="Better stamina"><span class="custom-check"></span><span>Better stamina 🏃</span></label>
+      <label class="check-label"><input type="checkbox" name="beet_benefit" value="Skin glow"><span class="custom-check"></span><span>Skin glow ✨</span></label>
+      <label class="check-label"><input type="checkbox" name="beet_benefit" value="No noticeable benefit"><span class="custom-check"></span><span>No noticeable benefit</span></label>
+    </div>
+
+    <!-- ── SECTION 3: MORINGA POWDER ── -->
+    <div class="section-divider">
+      <div class="pill">Product 3</div>
+      <div class="line"></div>
+      <div class="emoji">🌱</div>
+    </div>
+    <div class="card" style="border-left: 4px solid #27ae60;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#27ae60;margin-bottom:16px;">Moringa Powder (Sehjan Powder)</div>
+
+      <div class="question-label">Overall Rating <span class="req">*</span></div>
+      <div class="star-group">
+        <input type="radio" name="moringa_rating" id="m5" value="5"><label for="m5">★</label>
+        <input type="radio" name="moringa_rating" id="m4" value="4"><label for="m4">★</label>
+        <input type="radio" name="moringa_rating" id="m3" value="3"><label for="m3">★</label>
+        <input type="radio" name="moringa_rating" id="m2" value="2"><label for="m2">★</label>
+        <input type="radio" name="moringa_rating" id="m1" value="1"><label for="m1">★</label>
+      </div>
+      <div class="star-desc">1 = Poor &nbsp;|&nbsp; 3 = Good &nbsp;|&nbsp; 5 = Excellent</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How would you describe the taste of Moringa Powder? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="moringa_taste" value="Grassy & Fresh" required><span class="opt-chip">Grassy & Fresh 🌿</span></label>
+        <label class="opt-label"><input type="radio" name="moringa_taste" value="Slightly Bitter"><span class="opt-chip">Slightly Bitter</span></label>
+        <label class="opt-label"><input type="radio" name="moringa_taste" value="Neutral / Mild"><span class="opt-chip">Neutral / Mild</span></label>
+        <label class="opt-label"><input type="radio" name="moringa_taste" value="Very Bitter"><span class="opt-chip">Very Bitter</span></label>
+        <label class="opt-label"><input type="radio" name="moringa_taste" value="Earthy & Herbal"><span class="opt-chip">Earthy & Herbal</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How did you use Moringa Powder? (Select all that apply)</div>
+      <label class="check-label"><input type="checkbox" name="moringa_use" value="Mixed in water / juice"><span class="custom-check"></span><span>Mixed in water / juice</span></label>
+      <label class="check-label"><input type="checkbox" name="moringa_use" value="Added to dal / sabzi"><span class="custom-check"></span><span>Added to dal / sabzi 🥗</span></label>
+      <label class="check-label"><input type="checkbox" name="moringa_use" value="Smoothie / Shake"><span class="custom-check"></span><span>Smoothie / Shake</span></label>
+      <label class="check-label"><input type="checkbox" name="moringa_use" value="As health supplement"><span class="custom-check"></span><span>As health supplement 💊</span></label>
+      <label class="check-label"><input type="checkbox" name="moringa_use" value="With milk / lassi"><span class="custom-check"></span><span>With milk / lassi 🥛</span></label>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Did you know Moringa is called "Miracle Tree"? Did the product meet that expectation?</div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="moringa_exp" value="Exceeded expectation"><span class="opt-chip">Exceeded 🌟</span></label>
+        <label class="opt-label"><input type="radio" name="moringa_exp" value="Met expectation"><span class="opt-chip">Met Expectation ✅</span></label>
+        <label class="opt-label"><input type="radio" name="moringa_exp" value="Below expectation"><span class="opt-chip">Below Expectation</span></label>
+        <label class="opt-label"><input type="radio" name="moringa_exp" value="Did not know"><span class="opt-chip">Didn't know this 🤔</span></label>
+      </div>
+    </div>
+
+    <!-- ── SECTION 4: RAW BANANA POWDER ── -->
+    <div class="section-divider">
+      <div class="pill">Product 4</div>
+      <div class="line"></div>
+      <div class="emoji">🍌</div>
+    </div>
+    <div class="card" style="border-left: 4px solid #8e6b2e;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#8e6b2e;margin-bottom:16px;">Raw Banana Powder (Kaccha Kela Powder)</div>
+
+      <div class="question-label">Overall Rating <span class="req">*</span></div>
+      <div class="star-group">
+        <input type="radio" name="rawban_rating" id="rb5" value="5"><label for="rb5">★</label>
+        <input type="radio" name="rawban_rating" id="rb4" value="4"><label for="rb4">★</label>
+        <input type="radio" name="rawban_rating" id="rb3" value="3"><label for="rb3">★</label>
+        <input type="radio" name="rawban_rating" id="rb2" value="2"><label for="rb2">★</label>
+        <input type="radio" name="rawban_rating" id="rb1" value="1"><label for="rb1">★</label>
+      </div>
+      <div class="star-desc">1 = Poor &nbsp;|&nbsp; 3 = Good &nbsp;|&nbsp; 5 = Excellent</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How was the taste of Raw Banana Powder? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="rawban_taste" value="Neutral / Mild" required><span class="opt-chip">Neutral / Mild</span></label>
+        <label class="opt-label"><input type="radio" name="rawban_taste" value="Slightly Starchy"><span class="opt-chip">Slightly Starchy</span></label>
+        <label class="opt-label"><input type="radio" name="rawban_taste" value="Light Banana Aroma"><span class="opt-chip">Light Banana Aroma</span></label>
+        <label class="opt-label"><input type="radio" name="rawban_taste" value="Tasteless"><span class="opt-chip">Tasteless</span></label>
+        <label class="opt-label"><input type="radio" name="rawban_taste" value="Unpleasant"><span class="opt-chip">Unpleasant</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How did you use Raw Banana Powder? (Select all that apply)</div>
+      <label class="check-label"><input type="checkbox" name="rawban_use" value="Roti / Paratha"><span class="custom-check"></span><span>Roti / Paratha 🫓</span></label>
+      <label class="check-label"><input type="checkbox" name="rawban_use" value="Porridge / Khichdi"><span class="custom-check"></span><span>Porridge / Khichdi</span></label>
+      <label class="check-label"><input type="checkbox" name="rawban_use" value="Baby food / Weaning"><span class="custom-check"></span><span>Baby food / Weaning 👶</span></label>
+      <label class="check-label"><input type="checkbox" name="rawban_use" value="Protein shake / gym"><span class="custom-check"></span><span>Protein shake / gym 💪</span></label>
+      <label class="check-label"><input type="checkbox" name="rawban_use" value="Digestive remedy"><span class="custom-check"></span><span>Digestive remedy 🤍</span></label>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Did the Raw Banana Powder help with digestion or gut health?</div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="rawban_gut" value="Yes, noticeably"><span class="opt-chip">Yes, noticeably ✅</span></label>
+        <label class="opt-label"><input type="radio" name="rawban_gut" value="Somewhat"><span class="opt-chip">Somewhat</span></label>
+        <label class="opt-label"><input type="radio" name="rawban_gut" value="Too early to say"><span class="opt-chip">Too early to say</span></label>
+        <label class="opt-label"><input type="radio" name="rawban_gut" value="No difference"><span class="opt-chip">No difference</span></label>
+      </div>
+    </div>
+
+    <!-- ── SECTION 5: RIPE BANANA POWDER ── -->
+    <div class="section-divider">
+      <div class="pill">Product 5</div>
+      <div class="line"></div>
+      <div class="emoji">🍌</div>
+    </div>
+    <div class="card" style="border-left: 4px solid #f39c12;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#f39c12;margin-bottom:16px;">Ripe Banana Powder (Pakka Kela Powder)</div>
+
+      <div class="question-label">Overall Rating <span class="req">*</span></div>
+      <div class="star-group">
+        <input type="radio" name="ripeban_rating" id="rpb5" value="5"><label for="rpb5">★</label>
+        <input type="radio" name="ripeban_rating" id="rpb4" value="4"><label for="rpb4">★</label>
+        <input type="radio" name="ripeban_rating" id="rpb3" value="3"><label for="rpb3">★</label>
+        <input type="radio" name="ripeban_rating" id="rpb2" value="2"><label for="rpb2">★</label>
+        <input type="radio" name="ripeban_rating" id="rpb1" value="1"><label for="rpb1">★</label>
+      </div>
+      <div class="star-desc">1 = Poor &nbsp;|&nbsp; 3 = Good &nbsp;|&nbsp; 5 = Excellent</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How was the taste of Ripe Banana Powder? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="ripeban_taste" value="Sweet & Delicious" required><span class="opt-chip">Sweet & Delicious 😋</span></label>
+        <label class="opt-label"><input type="radio" name="ripeban_taste" value="Natural Banana Flavour"><span class="opt-chip">Natural Banana Flavour</span></label>
+        <label class="opt-label"><input type="radio" name="ripeban_taste" value="Mildly Sweet"><span class="opt-chip">Mildly Sweet</span></label>
+        <label class="opt-label"><input type="radio" name="ripeban_taste" value="Too Sweet"><span class="opt-chip">Too Sweet</span></label>
+        <label class="opt-label"><input type="radio" name="ripeban_taste" value="Bland"><span class="opt-chip">Bland</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How did you use Ripe Banana Powder? (Select all that apply)</div>
+      <label class="check-label"><input type="checkbox" name="ripeban_use" value="Smoothie / Milkshake"><span class="custom-check"></span><span>Smoothie / Milkshake 🥤</span></label>
+      <label class="check-label"><input type="checkbox" name="ripeban_use" value="Banana cake / baking"><span class="custom-check"></span><span>Banana cake / baking 🎂</span></label>
+      <label class="check-label"><input type="checkbox" name="ripeban_use" value="Baby food"><span class="custom-check"></span><span>Baby food 👶</span></label>
+      <label class="check-label"><input type="checkbox" name="ripeban_use" value="Overnight oats / porridge"><span class="custom-check"></span><span>Overnight oats / porridge</span></label>
+      <label class="check-label"><input type="checkbox" name="ripeban_use" value="Pre / post workout snack"><span class="custom-check"></span><span>Pre/post workout snack 💪</span></label>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Would you prefer Ripe Banana Powder over fresh bananas for convenience?</div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="ripeban_conv" value="Yes, much more convenient"><span class="opt-chip">Yes, more convenient ✅</span></label>
+        <label class="opt-label"><input type="radio" name="ripeban_conv" value="Sometimes"><span class="opt-chip">Sometimes</span></label>
+        <label class="opt-label"><input type="radio" name="ripeban_conv" value="Prefer fresh bananas"><span class="opt-chip">Prefer fresh bananas</span></label>
+        <label class="opt-label"><input type="radio" name="ripeban_conv" value="Depends on use case"><span class="opt-chip">Depends on use</span></label>
+      </div>
+    </div>
+
+    <!-- ── SECTION 6: OVERALL ── -->
+    <div class="section-divider">
+      <div class="pill">Overall Experience</div>
+      <div class="line"></div>
+      <div class="emoji">⭐</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Overall, how satisfied are you with the Devraj Foods product kit? <span class="req">*</span></div>
+      <div class="star-group">
+        <input type="radio" name="overall_rating" id="ov5" value="5" required><label for="ov5">★</label>
+        <input type="radio" name="overall_rating" id="ov4" value="4"><label for="ov4">★</label>
+        <input type="radio" name="overall_rating" id="ov3" value="3"><label for="ov3">★</label>
+        <input type="radio" name="overall_rating" id="ov2" value="2"><label for="ov2">★</label>
+        <input type="radio" name="overall_rating" id="ov1" value="1"><label for="ov1">★</label>
+      </div>
+      <div class="star-desc">1 = Poor &nbsp;|&nbsp; 3 = Good &nbsp;|&nbsp; 5 = Excellent</div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How was the packaging quality (aluminium zip-lock pouch)? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="packaging" value="Excellent – premium feel" required><span class="opt-chip">Excellent – premium feel 🏆</span></label>
+        <label class="opt-label"><input type="radio" name="packaging" value="Good – functional"><span class="opt-chip">Good – functional</span></label>
+        <label class="opt-label"><input type="radio" name="packaging" value="Average"><span class="opt-chip">Average</span></label>
+        <label class="opt-label"><input type="radio" name="packaging" value="Poor"><span class="opt-chip">Poor</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">How would you rate the value for money? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="value_money" value="Excellent value" required><span class="opt-chip">Excellent value 💯</span></label>
+        <label class="opt-label"><input type="radio" name="value_money" value="Fair price"><span class="opt-chip">Fair price</span></label>
+        <label class="opt-label"><input type="radio" name="value_money" value="Slightly expensive"><span class="opt-chip">Slightly expensive</span></label>
+        <label class="opt-label"><input type="radio" name="value_money" value="Too expensive"><span class="opt-chip">Too expensive</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Which product from the kit was your FAVOURITE? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="favourite" value="Ginger Powder" required><span class="opt-chip">🫚 Ginger</span></label>
+        <label class="opt-label"><input type="radio" name="favourite" value="Beetroot Powder"><span class="opt-chip">❤️ Beetroot</span></label>
+        <label class="opt-label"><input type="radio" name="favourite" value="Moringa Powder"><span class="opt-chip">🌱 Moringa</span></label>
+        <label class="opt-label"><input type="radio" name="favourite" value="Raw Banana Powder"><span class="opt-chip">🍌 Raw Banana</span></label>
+        <label class="opt-label"><input type="radio" name="favourite" value="Ripe Banana Powder"><span class="opt-chip">🍌 Ripe Banana</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Would you recommend Devraj Foods to your friends and family? <span class="req">*</span></div>
+      <div class="options-grid">
+        <label class="opt-label"><input type="radio" name="recommend" value="Definitely Yes" required><span class="opt-chip">Definitely Yes 🙌</span></label>
+        <label class="opt-label"><input type="radio" name="recommend" value="Yes, probably"><span class="opt-chip">Yes, probably</span></label>
+        <label class="opt-label"><input type="radio" name="recommend" value="Not sure"><span class="opt-chip">Not sure</span></label>
+        <label class="opt-label"><input type="radio" name="recommend" value="No"><span class="opt-chip">No</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Which other products would you like Devraj Foods to launch?</div>
+      <label class="check-label"><input type="checkbox" name="new_products" value="Amla Powder"><span class="custom-check"></span><span>Amla Powder 🍃</span></label>
+      <label class="check-label"><input type="checkbox" name="new_products" value="Turmeric Powder"><span class="custom-check"></span><span>Turmeric Powder 💛</span></label>
+      <label class="check-label"><input type="checkbox" name="new_products" value="Ashwagandha Powder"><span class="custom-check"></span><span>Ashwagandha Powder 💪</span></label>
+      <label class="check-label"><input type="checkbox" name="new_products" value="Spinach Powder"><span class="custom-check"></span><span>Spinach Powder 🥬</span></label>
+      <label class="check-label"><input type="checkbox" name="new_products" value="Coconut Powder"><span class="custom-check"></span><span>Coconut Powder 🥥</span></label>
+      <label class="check-label"><input type="checkbox" name="new_products" value="Protein Blend"><span class="custom-check"></span><span>Protein / Functional Blend</span></label>
+    </div>
+
+    <div class="card">
+      <div class="question-label">Any additional comments, suggestions, or feedback for us? 💬</div>
+      <textarea name="comments" placeholder="Write your honest feedback here. Your words help us grow and improve..."></textarea>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-section">
+      <button type="submit" class="submit-btn">✅ Submit My Review</button>
+      <p style="margin-top:12px;font-size:0.8rem;color:#888;">Your feedback is 100% confidential and helps us serve you better.</p>
+    </div>
+
+  </form>
+
+  <!-- THANK YOU -->
+  <div id="thankyou">
+    <div class="big-check">🌿</div>
+    <h2>Thank You for Your Feedback!</h2>
+    <p style="margin-top:8px;">Your review means a lot to the Devraj Foods family.<br>We'll keep improving to serve you better!</p>
+    <p style="margin-top:20px;font-size:0.85rem;color:#888;">
+      Questions? Reach us at<br>
+      <strong>📞 87993 26034</strong> &nbsp;|&nbsp;
+      <strong>📧 info.devrajfoods@gmail.com</strong>
+    </p>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--dark-green);margin-bottom:4px;">🌿 Devraj Foods</p>
+    <p>Natural. Pure. Trusted.</p>
+    <div class="contact-row">
+      <span>📞 <a href="tel:8799326034">87993 26034</a></span>
+      <span>📧 <a href="mailto:info.devrajfoods@gmail.com">info.devrajfoods@gmail.com</a></span>
+      <span>📍 Sunrise Bunglowes, Sama Savli Road, Vadodara</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Progress bar update on input change
+  const requiredFields = ['source','ginger_rating','ginger_taste','beet_rating','beet_taste',
+    'moringa_rating','moringa_taste','rawban_rating','rawban_taste','ripeban_rating','ripeban_taste',
+    'overall_rating','packaging','value_money','favourite','recommend'];
+
+  function updateProgress() {
+    let filled = 0;
+    requiredFields.forEach(name => {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      if (checked) filled++;
+    });
+    const pct = Math.round((filled / requiredFields.length) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  document.addEventListener('change', updateProgress);
+
+  function encode(data) {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&');
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('reviewForm');
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => {
+      if (data[key]) {
+        data[key] = data[key] + ', ' + value;
+      } else {
+        data[key] = value;
+      }
+    });
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode(data)
+    })
+    .then(() => {
+      form.style.display = 'none';
+      document.getElementById('thankyou').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(err => {
+      alert('Something went wrong. Please try again.');
+      console.error(err);
+    });
+  }
+</script>
+</body>
+</html>
